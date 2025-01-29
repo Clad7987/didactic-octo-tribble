@@ -3,20 +3,29 @@ import uuid
 import json
 import shutil
 
-files = os.listdir('./img_to_ascii_img/output/image')
-dirname = os.path.dirname(__file__)
+def main():
+    images = []
+    for img in os.listdir('imgs'):
+        images.append('imgs/' + img)
 
-for file in files:
-    shutil.move(os.path.join(dirname, 'img_to_ascii_img', 'output', 'image', file), os.path.join(dirname, 'imgs', file))
-    filename, extension = os.path.splitext(file)
-    filename = f'{uuid.uuid4()}{extension}'
-    os.rename(os.path.join(dirname, 'imgs', file), os.path.join(dirname, 'imgs', filename))
+    images_formated = []
+    images_name = []
+    for image in images:
+        name = image.split(' - ')[0]
+        if name not in images_name:
+            images_name.append(name)
 
-files = os.listdir('imgs')
+    for image in images_name:
+        names = []
+        for i in (14,25,40,50,100,110):
+            names.append(
+                f'{image} - {i}.jpg'
+            )
+        images_formated.append(names)
 
-output = []
-for file in files:
-    output.append(os.path.join("./imgs", file))
+    with open("data.json", "w") as data:
+        json.dump(images_formated, data)
 
-with open("data.json", "w") as data:
-    json.dump(output, data)
+if __name__ == '__main__':
+    main()
+
