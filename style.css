@@ -16,9 +16,10 @@ h1 {
 }
 
 #ascii-gallery {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  columns: 5 ;
+  /*display: flex;
+  flex-wrap: wrap;*/
+  column-gap: 20px;
   justify-content: center;
 }
 
@@ -34,6 +35,69 @@ h1 {
     .ascii-image {
         width: 90dvw;
     }
+    #ascii-gallery {
+      columns: 1;
+    }
 }
 
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+#font-size-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+#font-size-buttons {
+  position: fixed;
+  bottom: 50px;
+  right: 20px;
+  display: none; /* Inicialmente escondido */
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  border: 1px solid #ccc;
+}
+
+.font-size-button {
+  display: block;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.font-size-button:hover {
+  background-color: #ddd;
+}
+
+.font-size-button.selected {
+  background-color: #007bff;
+  color: white;
+}
 

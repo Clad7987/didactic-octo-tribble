@@ -1,28 +1,41 @@
 // Função para carregar o JSON e criar as imagens
-async function loadAsciiImages() {
+async function loadAsciiImages(fontSize = 50) {
 	try {
 		const response = await fetch("data.json");
 		const data = await response.json();
 		const gallery = document.getElementById("ascii-gallery");
 
-		data.forEach((imageSet) => {
-			// Cria um elemento de imagem
-			const asciiImage = document.createElement("img");
-			asciiImage.classList.add("ascii-image");
+		let scale = 1;
+		switch(fontSize) {
+			case "14": break;
+			case "25": scale = .90; break;
+			case "40": scale = .80; break;
+			case "50": scale = .75; break;
+			case "100": scale = .50; break;
+			case "110": scale = .30; break;
+		}
 
-			// Salva o conjunto de imagens no atributo 'data-images'
-			asciiImage.setAttribute("data-images", JSON.stringify(imageSet)); // Salva o array de URLs
+		// Verifica se o tamanho selecionado existe nos dados
+		if (data[fontSize]) {
+			// Limpa o conteúdo da galeria antes de adicionar as novas imagens
+			gallery.innerHTML = "";
 
-			// Define a primeira imagem como inicial (lazy loading será aplicado)
-			asciiImage.setAttribute("data-srcset", imageSet[imageSet.length-1]);
-			gallery.appendChild(asciiImage);
-		});
+			// Adiciona as imagens do conjunto selecionado
+			data[fontSize].forEach((imageSet) => {
+				const div = document.createElement("div")
+				const asciiImage = document.createElement("img");
+				asciiImage.classList.add("ascii-image");
+				asciiImage.setAttribute("data-srcset", imageSet);
+				//asciiImage.style.transform = `scale(${scale})`
+				div.appendChild(asciiImage)
+				gallery.appendChild(div);
+			});
 
-		// Ativa o lazy loading das imagens
-		enableLazyLoad();
-
-		// Adiciona o comportamento de slideshow
-		enableSlideshow();
+			// Ativa o lazy loading das imagens
+			enableLazyLoad();
+		} else {
+			console.warn("Tamanho de fonte não encontrado nos dados.");
+		}
 	} catch (error) {
 		console.error("Erro ao carregar as imagens ASCII:", error);
 	}
@@ -52,34 +65,44 @@ function enableLazyLoad() {
 	images.forEach((img) => observer.observe(img));
 }
 
-// Função para habilitar o slideshow ao passar o mouse
-function enableSlideshow() {
-	const images = document.querySelectorAll("img[data-images]");
+// Função para abrir/fechar a lista de tamanhos
+function toggleFontSizeButtons() {
+	const buttons = document.getElementById("font-size-buttons");
+	buttons.style.display = buttons.style.display === "none" ? "block" : "none";
+}
 
-	images.forEach((img) => {
-		let interval;
-		const imageSet = JSON.parse(img.getAttribute("data-images")); // Pega o array de imagens
-		let currentIndex = 0;
+// Função para selecionar o tamanho da fonte
+function selectFontSize(event) {
+	const fontSize = event.target.getAttribute("data-font-size");
 
-		// Função para iniciar o slideshow
-		function startSlideshow() {
-			interval = setInterval(() => {
-				currentIndex = (currentIndex + 1) % imageSet.length; // Alterna entre os índices
-				img.src = imageSet[currentIndex]; // Altera a imagem atual
-			}, 1000); // Troca a imagem a cada 1 segundo
-		}
+	// Atualiza a seleção visual dos botões
+	document.querySelectorAll(".font-size-button").forEach((button) => {
+		button.classList.remove("selected");
+	});
+	event.target.classList.add("selected");
 
-		// Função para parar o slideshow
-		function stopSlideshow() {
-			clearInterval(interval); // Interrompe o intervalo
-			img.src = imageSet[0]; // Volta para a primeira imagem
-		}
+	// Carrega as imagens com o tamanho selecionado
+	loadAsciiImages(fontSize);
+}
 
-		// Eventos de mouse para iniciar/parar o slideshow
-		img.addEventListener("mouseenter", startSlideshow);
-		img.addEventListener("mouseleave", stopSlideshow);
+// Função para adicionar eventos aos botões de tamanho de fonte
+function setupFontSizeButtons() {
+	const buttons = document.querySelectorAll(".font-size-button");
+
+	buttons.forEach((button) => {
+		button.addEventListener("click", selectFontSize);
 	});
 }
 
 // Chama a função ao carregar a página
-window.onload = loadAsciiImages;
+window.onload = () => {
+	// Carrega as imagens iniciais
+	loadAsciiImages(14);
+
+	// Configura os botões de tamanho de fonte
+	setupFontSizeButtons();
+
+	// Adiciona o evento de abrir/fechar a lista
+	const toggleButton = document.getElementById("font-size-toggle");
+	toggleButton.addEventListener("click", toggleFontSizeButtons);
+};
