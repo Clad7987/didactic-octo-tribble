@@ -5,14 +5,14 @@ async function loadAsciiImages(fontSize = 50) {
 		const data = await response.json();
 		const gallery = document.getElementById("ascii-gallery");
 
-		let scale = 1;
+		let scale = 10;
 		switch(fontSize) {
 			case "14": break;
-			case "25": scale = .90; break;
-			case "40": scale = .80; break;
-			case "50": scale = .75; break;
-			case "100": scale = .50; break;
-			case "110": scale = .30; break;
+			case "25": scale = 20; break;
+			case "40": scale = 40; break;
+			case "50": scale = 50; break;
+			case "100": scale = 100; break;
+			case "110": scale = 110; break;
 		}
 
 		// Verifica se o tamanho selecionado existe nos dados
@@ -22,13 +22,13 @@ async function loadAsciiImages(fontSize = 50) {
 
 			// Adiciona as imagens do conjunto selecionado
 			data[fontSize].forEach((imageSet) => {
-				const div = document.createElement("div")
 				const asciiImage = document.createElement("img");
 				asciiImage.classList.add("ascii-image");
 				asciiImage.setAttribute("data-srcset", imageSet);
 				//asciiImage.style.transform = `scale(${scale})`
-				div.appendChild(asciiImage)
-				gallery.appendChild(div);
+				asciiImage.style.width = `10%`
+				asciiImage.style.flexGrow = 1
+				gallery.appendChild(asciiImage);
 			});
 
 			// Ativa o lazy loading das imagens

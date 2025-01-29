@@ -8,7 +8,7 @@ body {
 
 .container {
   text-align: center;
-  padding: 20px;
+  max-width: 100dvw;
 }
 
 h1 {
@@ -16,11 +16,11 @@ h1 {
 }
 
 #ascii-gallery {
-  columns: 5 ;
-  /*display: flex;
-  flex-wrap: wrap;*/
-  column-gap: 20px;
-  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 1rem;
+  gap: 10px;
+  align-items: stretch;
 }
 
 .ascii-image {
@@ -44,10 +44,6 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-}
-
-.container {
-  padding: 20px;
 }
 
 h1 {
