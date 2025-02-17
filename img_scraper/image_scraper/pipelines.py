@@ -21,7 +21,7 @@ class ImageScraperPipeline(ImagesPipeline):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.session = requests.Session()
-        self.item_filter = True
+        self.item_filter = False
 
     def process_item(self, item, spider):
         image_store = spider.settings.get("IMAGES_STORE")
